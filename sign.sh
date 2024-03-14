@@ -1,9 +1,14 @@
-BASE_DIR=./x86_64
+PKG_DIR=./x86_64
 
-for pkg in "${BASE_DIR}"/*.zst
-do
- 
+for pkg in "${PKG_DIR}"/*.zst
+do 
+	if [ -f "${pkg}".sig ]; then
+		echo "Skipping signed package - $pkg"
+		continue
+	fi
 	echo "Signing package - $pkg"
 	# always "double quote" $f to avoid problems
-	gpg --use-agent --output "${pkg}".sig --detach-sig "${pkg}" 
+	gpg --use-agent --output "${pkg}".sig --detach-sig "${pkg}"
+	echo "Adding package - $pkg"
+	repo-add --verify --sign kloon.db.tar.gz "${pkg}"
 done

@@ -10,5 +10,5 @@ do
 	# always "double quote" $f to avoid problems
 	gpg --use-agent --output "${pkg}".sig --detach-sig "${pkg}"
 	echo "Adding package - $pkg"
-	repo-add --verify --sign kloon.db.tar.gz "${pkg}"
+	( cd "${PKG_DIR}" && repo-add --verify --sign kloon.db.tar.gz "${pkg##*/}" )
 done
